@@ -7,9 +7,7 @@
 //
 
 import UIKit
-import Alamofire
 import CoreData
-import SwiftyJSON
 
 
 private let reuseIdentifier = "productCell"

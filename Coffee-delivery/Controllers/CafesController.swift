@@ -8,8 +8,6 @@
 
 import UIKit
 import CoreData
-import Alamofire
-import SwiftyJSON
 
 
 class CafesController: UITableViewController {
