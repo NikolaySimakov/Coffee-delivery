@@ -42,13 +42,6 @@ class ShopCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? MenuController, let tableView = superview as? UITableView, let index = tableView.indexPath(for: self) {
-//            vc?.goods =
-            print(index)
-        }
-    }
 }
 
 
