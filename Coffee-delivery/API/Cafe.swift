@@ -13,6 +13,7 @@ struct Cafe {
     let title: String
     let body: String
     let image: String
-//    let goods: Array<Product>
+    let status: Bool
+//    let rating: String
     
 }

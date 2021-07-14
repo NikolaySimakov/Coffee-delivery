@@ -17,7 +17,7 @@ private let reuseIdentifier = "productCell"
 
 class MenuController: UIViewController {
     
-    var goods : [Int : Product] = [:]
+    private var goods : [Int : Product] = [:]
     private var cart : [Int : (Product, Int)] = [:] // index : [product, count]
     private var goodsInCart : [Array<Any>] = []
     var menuID : String!
@@ -25,39 +25,21 @@ class MenuController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var orderBtn: UIButton!
     
-    @IBAction func orderBtnTap(_ sender: UIButton) {
-        
-    }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         orderBtn.layer.cornerRadius = 10
         collectionView.delegate = self
         collectionView.dataSource = self
-        fetchMenuData()
+        
+        let parser = CoffeeParser()
+        parser.fetchGoods(menuID: menuID, { goods in
+            self.goods = goods
+            self.collectionView.reloadData()
+        })
+        
         initCart()
-    }
-    
-    
-    func fetchMenuData() {
-        AF.request("http://localhost:5000/cafes/\(menuID!)/menu").responseJSON { (response) in
-            switch response.result {
-                case .success(let value):
-                    let json = JSON(value)
-                    for i in json["goods"] {
-                        self.goods[Int(i.0)!] = Product(
-                                title: i.1["title"].string!,
-                                price: i.1["price"].string!,
-                                image: i.1["image"].string!
-                            )
-                    }
-                    self.collectionView.reloadData()
-            case .failure(let error):
-                print(error)
-            }
-            
-        }
     }
     
     

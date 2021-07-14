@@ -14,7 +14,6 @@ import SwiftyJSON
 
 class CafesController: UITableViewController {
 
-    private let apiURL : String = "http://localhost:5000/cafes"
     private var cafes : [Int : Cafe] = [:]
     
     
@@ -31,30 +30,19 @@ class CafesController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         addressBtn.layer.cornerRadius = 8
-        fetchRestaurantData()
-    }
-    
-    
-    private func fetchRestaurantData() {
-        AF.request(apiURL).responseJSON { (response) in
-            switch response.result {
-                case .success(let value):
-                    let json = JSON(value)
-                    for i in json {
-                        self.cafes[Int(i.0)!] = Cafe(
-                                title: i.1["title"].string!,
-                                body: i.1["body"].string!,
-                                image: i.1["image"].string!
-                            )
-                    }
-                    self.tableView.reloadData()
-            case .failure(let error):
-                print(error)
-            }
+        
+        let parser = CoffeeParser()
+        
+        parser.fetchCafes { cafes in
+            
+            self.cafes = cafes
+            self.tableView.reloadData()
             
         }
     }
+    
     
     private func setupAddress() {
         let defaults = UserDefaults.standard
@@ -63,6 +51,7 @@ class CafesController: UITableViewController {
             self.addressBtn.setTitle(address, for: .normal)
         }
     }
+    
     
     private func addressAlert() {
         let alert = UIAlertController(title: "Укажите свой адрес", message: nil, preferredStyle: .alert)
@@ -111,11 +100,6 @@ class CafesController: UITableViewController {
         return 325
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-    }
-    
-    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         
         return true
@@ -130,7 +114,6 @@ class CafesController: UITableViewController {
             MenuController, let index = tableView.indexPathForSelectedRow {
             destination.menuID = String(index.row)
             destination.title = cafes[index.row]?.title
-            destination.fetchMenuData()
         }
     }
     

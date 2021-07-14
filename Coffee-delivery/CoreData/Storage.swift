@@ -1,5 +1,5 @@
 //
-//  Parse.swift
+//  Storage.swift
 //  Coffee-delivery
 //
 //  Created by User on 14/07/2021.
@@ -7,11 +7,8 @@
 //
 
 import Foundation
-import Alamofire
-import SwiftyJSON
+import CoreData
 
-
-private let apiURL : String = "http://localhost:5000/cafes"
-
-
-
+class Storage {
+    
+}
