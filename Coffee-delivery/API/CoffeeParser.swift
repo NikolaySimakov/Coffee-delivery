@@ -16,12 +16,6 @@ class CoffeeParser {
     private let apiURL : String = "https://coffee-delivery-tests.herokuapp.com"
     
     
-    
-    init() {
-        
-    }
-    
-    
     func fetchCafes(_ completion: @escaping ([Int : Cafe]) -> Void) {
         
         var cafes : [Int : Cafe] = [:]
@@ -72,6 +66,31 @@ class CoffeeParser {
         }
     }
     
+    
+    func sendOrder(cart: [(Product, Int)]) {
+        var data = [String : [String : Any]]()
+        let userId = UIDevice.current.identifierForVendor?.uuidString
+        
+        for i in 0..<cart.count {
+            let (product, count) = cart[i]
+            
+            data[String(i)] = [
+                "title" : product.title,
+                "price" : product.price,
+                "count" : count
+            ]
+        }
+        
+        let params : [String : Any] = [
+            "userId" : userId!,
+            "goods" : data
+        ]
+        
+        AF.request(apiURL + "/orders", method: .post, parameters: params).responseJSON { response in
+            print(response)
+        }
+        
+    }
     
 }
 
