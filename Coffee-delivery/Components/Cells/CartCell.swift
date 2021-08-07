@@ -19,15 +19,16 @@ class CartCell: UITableViewCell {
     @IBOutlet weak var increaseButton: UIButton!
     @IBOutlet weak var countLabel: UILabel!
     
+    var decreaseCountAction : (()->())?
+    var increaseCountAction : (()->())?
+    
     
     @IBAction func decreaseButtonTap(_ sender: UIButton) {
-        
-        
+        decreaseCountAction?()
     }
     
     @IBAction func increaseButtonTap(_ sender: UIButton) {
-        
-        
+        increaseCountAction?()
     }
     
     
@@ -54,6 +55,8 @@ class CartCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         productImageView.layer.cornerRadius = 5
+        decreaseButton.layer.cornerRadius = 4
+        increaseButton.layer.cornerRadius = 4
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

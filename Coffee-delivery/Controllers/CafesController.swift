@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 
+private let reuseIdentifier = "shopCell"
 
 class CafesController: UITableViewController {
 
@@ -88,9 +89,17 @@ class CafesController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "shopCell", for: indexPath) as! ShopCell
-        cell.selectionStyle = .none
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ShopCell
         cell.initData(cafe: cafes[indexPath.row]!)
+        let parser = CoffeeParser()
+        if cafes[indexPath.row]!.image == nil {
+            parser.getImage(cafes[indexPath.row]!.imageURL!) { (img) in
+                cell.shopImage.image = img
+                self.cafes[indexPath.row]!.image = img
+            }
+        } else {
+            cell.shopImage.image = cafes[indexPath.row]!.image
+        }
         return cell
     }
 
@@ -103,6 +112,9 @@ class CafesController: UITableViewController {
         return true
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
 
     
     // MARK: - Navigation

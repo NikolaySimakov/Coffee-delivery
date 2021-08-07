@@ -6,14 +6,23 @@
 //  Copyright © 2021 Nikolay Simakov. All rights reserved.
 //
 
+import UIKit
 import Foundation
 
-struct Cafe {
+class Cafe {
     
-    let title: String
-    let body: String
-    let image: String
-    let status: Bool
-//    let rating: String
+    var title: String!
+    var rating: String!
+    var imageURL: String!
+    var image: UIImage?
+    var status: Bool!
+    
+    init(title: String, rating: String, imageURL: String, image: UIImage?, status: Bool) {
+        self.title = title
+        self.rating = rating
+        self.imageURL = imageURL
+        self.image = image
+        self.status = status
+    }
     
 }

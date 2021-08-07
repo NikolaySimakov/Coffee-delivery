@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SwiftyJSON
+import Alamofire
 
 class CartController: UIViewController {
     
@@ -14,14 +16,13 @@ class CartController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var payBtn: UIButton!
+    @IBOutlet weak var totalCostLabel: UILabel!
     
     @IBAction func payBtnTap(_ sender: UIButton) {
-        
-        
+        let parser = CoffeeParser()
+        parser.sendOrder(cart: cart)
     }
     
-    
-    private var someCount = 4
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,9 +31,29 @@ class CartController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.removeExtraCellLines()
+        updateTotalCost()
     }
     
-
+    
+    private func updateTotalCost() {
+        var total = 0
+        
+        for (p, c) in cart {
+            total += Int(p.price)! * c
+        }
+        
+        totalCostLabel.text = "Итого: \(total) ₽"
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as?
+            MenuController {
+//            for data in cart {
+//                destination.cart.append(data.value)
+//            }
+        }
+    }
 
 }
 
@@ -48,6 +69,26 @@ extension CartController: UITableViewDelegate, UITableViewDataSource {
         let product = cart[indexPath.row].0
         let count = String(cart[indexPath.row].1)
         cell.initData(product: product, count: count)
+        
+        cell.increaseCountAction = {
+            self.cart[indexPath.row] = (self.cart[indexPath.row].0, self.cart[indexPath.row].1 + 1)
+            tableView.reloadRows(at: [indexPath], with: .none)
+            self.updateTotalCost()
+        }
+        
+        cell.decreaseCountAction = {
+            self.cart[indexPath.row] = (self.cart[indexPath.row].0, max(self.cart[indexPath.row].1 - 1, 0))
+            if self.cart[indexPath.row].1 == 0 {
+                self.cart.remove(at: indexPath.row)
+//                tableView.deleteRows(at: [indexPath], with: .fade)
+                tableView.deleteRows(at: [indexPath], with: .none)
+                tableView.reloadData()
+            } else  {
+                tableView.reloadRows(at: [indexPath], with: .none)
+            }
+            self.updateTotalCost()
+        }
+        
         return cell
     }
     
@@ -55,8 +96,11 @@ extension CartController: UITableViewDelegate, UITableViewDataSource {
         if editingStyle == .delete {
             cart.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            self.updateTotalCost()
         }
     }
+    
+    
     
 }
 

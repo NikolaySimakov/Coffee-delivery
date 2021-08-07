@@ -15,13 +15,16 @@ private let reuseIdentifier = "productCell"
 
 class MenuController: UIViewController {
     
-    private var goods : [Int : Product] = [:]
+    private var goods : [Int : Product] = [:] // index : product
     private var cart : [Int : (Product, Int)] = [:] // index : [product, count]
     private var goodsInCart : [Array<Any>] = []
     var menuID : String!
     
+    lazy var searchBar: UISearchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: 200, height: 20))
+    
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var orderBtn: UIButton!
+    @IBOutlet weak var searchItem: UIBarButtonItem!
     
     
     override func viewDidLoad() {
@@ -95,6 +98,12 @@ class MenuController: UIViewController {
             for data in cart {
                 destination.cart.append(data.value)
             }
+        } else if let destination = segue.destination as? DetailController {
+            if let item = collectionView.indexPathsForSelectedItems?.last?.row {
+                let product = goods[item]!
+                destination._title = product.title
+                destination._image = (collectionView.cellForItem(at: IndexPath(item: item, section: 0)) as! ProductCell).productImageView.image!
+            }
         }
     }
 }
@@ -115,7 +124,13 @@ extension MenuController: UICollectionViewDataSource {
         
         cell.layer.cornerRadius = 20
         cell.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        cell.initData(product: goods[indexPath.row]!)
+        if cart.keys.contains(indexPath.row) {
+            cell.countLabel.text = String(self.cart[indexPath.row]!.1)
+            cell.initData(product: goods[indexPath.row]!, count: self.cart[indexPath.row]!.1)
+        } else {
+            cell.initData(product: goods[indexPath.row]!)
+        }
+
 //        for g in goodsInCart {
 //            if g[0] as! String == goods[indexPath.row].title {
 //                cell.priceBtn.setTitle("Добавлено", for: .normal)
@@ -124,15 +139,34 @@ extension MenuController: UICollectionViewDataSource {
 //        }
         
         cell.addProductAction = {
-            if let _ = self.cart[indexPath.row] {
-                let (p, c) = self.cart[indexPath.row]!
-                self.cart[indexPath.row]! = (p, c + 1)
-            } else {
+//            if self.cart.keys.contains(indexPath.row) {
                 self.cart[indexPath.row] = (self.goods[indexPath.row]!, 1)
                 
 //                self.addProductToCart(index: indexPath.row, count: 1)
-            }
+//            }
             print(self.cart)
+        }
+        
+        cell.increaseCountAction = {
+            let product = self.cart[indexPath.row]!.0
+            let count = self.cart[indexPath.row]!.1 + 1
+            self.cart[indexPath.row] = (product, count)
+            collectionView.reloadItems(at: [indexPath])
+        }
+        
+        cell.decreaseCountAction = {
+            if self.cart.keys.contains(indexPath.row) {
+                let product = self.cart[indexPath.row]!.0
+                let count = max(self.cart[indexPath.row]!.1 - 1, 0)
+                self.cart[indexPath.row] = (product, count)
+                collectionView.reloadItems(at: [indexPath])
+            }
+            
+            if self.cart[indexPath.row]!.1 == 0 {
+                let count = self.cart[indexPath.row]!.1
+                cell.btnsMapping(count)
+                self.cart.removeValue(forKey: indexPath.row)
+            }
         }
     
         return cell

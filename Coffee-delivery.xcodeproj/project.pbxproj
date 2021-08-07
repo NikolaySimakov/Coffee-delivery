@@ -19,7 +19,6 @@
 		CEF3660E269E415C00D51A99 /* ShopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF3660B269E415C00D51A99 /* ShopCell.swift */; };
 		CEF3660F269E415C00D51A99 /* ProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF3660C269E415C00D51A99 /* ProductCell.swift */; };
 		CEF36610269E415C00D51A99 /* CartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF3660D269E415C00D51A99 /* CartCell.swift */; };
-		CEF36618269E416D00D51A99 /* OrderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF36612269E416D00D51A99 /* OrderController.swift */; };
 		CEF36619269E416D00D51A99 /* CartController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF36613269E416D00D51A99 /* CartController.swift */; };
 		CEF3661A269E416D00D51A99 /* PayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF36614269E416D00D51A99 /* PayController.swift */; };
 		CEF3661C269E416D00D51A99 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF36616269E416D00D51A99 /* MenuController.swift */; };
@@ -31,6 +30,8 @@
 		CEF36636269E67A400D51A99 /* UserInfo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF36634269E67A400D51A99 /* UserInfo+CoreDataClass.swift */; };
 		CEF36637269E67A400D51A99 /* UserInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF36635269E67A400D51A99 /* UserInfo+CoreDataProperties.swift */; };
 		CEF36639269E83D000D51A99 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF36638269E83D000D51A99 /* Storage.swift */; };
+		CEF3663D26A13EF300D51A99 /* AddressController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF3663C26A13EF300D51A99 /* AddressController.swift */; };
+		CEF3664026A6EEEE00D51A99 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF3663F26A6EEEE00D51A99 /* DetailController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,7 +51,6 @@
 		CEF3660B269E415C00D51A99 /* ShopCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopCell.swift; sourceTree = "<group>"; };
 		CEF3660C269E415C00D51A99 /* ProductCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCell.swift; sourceTree = "<group>"; };
 		CEF3660D269E415C00D51A99 /* CartCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartCell.swift; sourceTree = "<group>"; };
-		CEF36612269E416D00D51A99 /* OrderController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderController.swift; sourceTree = "<group>"; };
 		CEF36613269E416D00D51A99 /* CartController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartController.swift; sourceTree = "<group>"; };
 		CEF36614269E416D00D51A99 /* PayController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PayController.swift; sourceTree = "<group>"; };
 		CEF36616269E416D00D51A99 /* MenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
@@ -62,6 +62,8 @@
 		CEF36634269E67A400D51A99 /* UserInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		CEF36635269E67A400D51A99 /* UserInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		CEF36638269E83D000D51A99 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		CEF3663C26A13EF300D51A99 /* AddressController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressController.swift; sourceTree = "<group>"; };
+		CEF3663F26A6EEEE00D51A99 /* DetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,7 +115,7 @@
 				CEF365EC269E411100D51A99 /* SceneDelegate.swift */,
 				CEF36601269E412800D51A99 /* API */,
 				CEF3661E269E417900D51A99 /* CoreData */,
-				CEF3660A269E415C00D51A99 /* Cells */,
+				CEF3663E26A1402800D51A99 /* Components */,
 				CEF36611269E416D00D51A99 /* Controllers */,
 				CEF36623269E423A00D51A99 /* Main.storyboard */,
 				CEF36608269E414F00D51A99 /* Assets.xcassets */,
@@ -149,8 +151,9 @@
 			children = (
 				CEF36617269E416D00D51A99 /* CafesController.swift */,
 				CEF36616269E416D00D51A99 /* MenuController.swift */,
+				CEF3663F26A6EEEE00D51A99 /* DetailController.swift */,
 				CEF36613269E416D00D51A99 /* CartController.swift */,
-				CEF36612269E416D00D51A99 /* OrderController.swift */,
+				CEF3663C26A13EF300D51A99 /* AddressController.swift */,
 				CEF36614269E416D00D51A99 /* PayController.swift */,
 			);
 			path = Controllers;
@@ -164,6 +167,14 @@
 				CEF36638269E83D000D51A99 /* Storage.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		CEF3663E26A1402800D51A99 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				CEF3660A269E415C00D51A99 /* Cells */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		F3D127A64F0C72ED0B489F82 /* Frameworks */ = {
@@ -294,12 +305,12 @@
 			files = (
 				CEF36619269E416D00D51A99 /* CartController.swift in Sources */,
 				CEF36610269E415C00D51A99 /* CartCell.swift in Sources */,
+				CEF3663D26A13EF300D51A99 /* AddressController.swift in Sources */,
 				CEF365EB269E411100D51A99 /* AppDelegate.swift in Sources */,
 				CEF365ED269E411100D51A99 /* SceneDelegate.swift in Sources */,
 				CEF3661D269E416D00D51A99 /* CafesController.swift in Sources */,
 				CEF3660E269E415C00D51A99 /* ShopCell.swift in Sources */,
 				CEF36637269E67A400D51A99 /* UserInfo+CoreDataProperties.swift in Sources */,
-				CEF36618269E416D00D51A99 /* OrderController.swift in Sources */,
 				CEF36605269E412800D51A99 /* Cafe.swift in Sources */,
 				CEF365F5269E411100D51A99 /* Coffee_delivery.xcdatamodeld in Sources */,
 				CEF3661C269E416D00D51A99 /* MenuController.swift in Sources */,
@@ -308,6 +319,7 @@
 				CEF36607269E412800D51A99 /* CoffeeParser.swift in Sources */,
 				CEF3661A269E416D00D51A99 /* PayController.swift in Sources */,
 				CEF36639269E83D000D51A99 /* Storage.swift in Sources */,
+				CEF3664026A6EEEE00D51A99 /* DetailController.swift in Sources */,
 				CEF36606269E412800D51A99 /* Product.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
