@@ -7,21 +7,21 @@
 //
 
 import UIKit
-import Foundation
 
-class Cafe {
+class Cafe : NSObject {
     
+    var id: Int!
     var title: String!
     var rating: String!
     var imageURL: String!
     var image: UIImage?
     var status: Bool!
     
-    init(title: String, rating: String, imageURL: String, image: UIImage?, status: Bool) {
+    init(id: Int, title: String, rating: String, imageURL: String, status: Bool) {
+        self.id = id
         self.title = title
         self.rating = rating
         self.imageURL = imageURL
-        self.image = image
         self.status = status
     }
     
