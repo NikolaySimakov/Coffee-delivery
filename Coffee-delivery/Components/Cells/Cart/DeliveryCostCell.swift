@@ -10,6 +10,8 @@ import UIKit
 
 class DeliveryCostCell: UITableViewCell {
     
+    static let ID : String = "deliveryCostCell"
+    
     @IBOutlet weak var deliveryCostLabel: UILabel!
 
     override func awakeFromNib() {
