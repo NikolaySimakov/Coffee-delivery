@@ -7,10 +7,10 @@
 //
 
 import UIKit
-import Alamofire
 
 class ProductCell: UICollectionViewCell {
     
+    static let ID : String = "productCell"
     
     @IBOutlet weak var productImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -18,7 +18,6 @@ class ProductCell: UICollectionViewCell {
     @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var increaseBtn: UIButton!
     @IBOutlet weak var decreaseBtn: UIButton!
-    
     
     var decreaseCountAction : (()->())?
     var increaseCountAction : (()->())?
@@ -32,7 +31,6 @@ class ProductCell: UICollectionViewCell {
         increaseCountAction?()
     }
     
-    
     @IBAction func priceBtnTap(_ sender: UIButton) {
         addProductAction?()
         countLabel.text = "1"
@@ -42,20 +40,10 @@ class ProductCell: UICollectionViewCell {
         countLabel.isHidden = false
     }
     
-    
-    func initData(product: Product, count: Int = 0) {
-        
-        let parser = CoffeeParser()
-        parser.getImage(product.image) { (img) in
-            
-            self.productImageView.image = img
-            
-        }
-        
+    func initData(product: Product) {
         titleLabel.text = product.title
-        priceBtn.setTitle(product.price + " ₽", for: .normal)
-        
-        btnsMapping(count)
+        priceBtn.setTitle(product.price + "₽", for: .normal)
+        btnsMapping(product.inCart())
     }
     
     func btnsMapping(_ count : Int) {
@@ -67,10 +55,13 @@ class ProductCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        layer.cornerRadius = 20
+        
         productImageView.clipsToBounds = true
         
         for i in [priceBtn, increaseBtn, decreaseBtn] { i!.layer.cornerRadius = 10 }
     }
-    
     
 }
