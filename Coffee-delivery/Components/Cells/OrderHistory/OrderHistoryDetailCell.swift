@@ -10,6 +10,8 @@ import UIKit
 
 class OrderHistoryDetailCell: UITableViewCell {
     
+    static let ID : String = "orderHistoryDetailCell"
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
     
