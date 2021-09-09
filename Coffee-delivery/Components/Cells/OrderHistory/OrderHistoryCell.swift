@@ -11,6 +11,8 @@ import ExpandableCell
 
 class OrderHistoryCell: ExpandableCell {
     
+    static let ID : String = "orderHistoryCell"
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var totalPriceLabel: UILabel!
     @IBOutlet weak var deliveryTimeLabel: UILabel!
