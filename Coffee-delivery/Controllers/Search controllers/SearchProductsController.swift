@@ -73,7 +73,7 @@ class SearchProductsController: UITableViewController {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? DrinkDetailController {
+        if let destination = segue.destination as? DrinkDetailsController {
             if let row = tableView.indexPathsForSelectedRows?.last?.row {
                 
                 var product : Product!
