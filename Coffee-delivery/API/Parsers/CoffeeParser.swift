@@ -11,22 +11,7 @@ import Alamofire
 import SwiftyJSON
 
 
-class CoffeeParser {
-    
-    func getImage(_ imageURL : String, _ completion: @escaping (UIImage) -> Void) {
-        
-        AF.request(imageURL, method: .get).response { response in
-
-           switch response.result {
-            case .success(let responseData):
-                completion(UIImage(data: responseData!)!)
-            
-            case .failure(let error):
-                print("error: ", error)
-            }
-        }
-    }
-    
+class CoffeeParser : ImageParser {
     
     func fetchCafes(_ completion: @escaping ([Int : Cafe]) -> Void) {
         
@@ -37,6 +22,7 @@ class CoffeeParser {
             case .success(let value):
                 
                 for i in JSON(value) {
+                    
                     cafes[Int(i.0)!] = Cafe(
                         id: Int(i.0)!,
                         title: i.1["title"].string!,
@@ -44,6 +30,7 @@ class CoffeeParser {
                         imageURL: i.1["image"].string!,
                         status: i.1["status"].bool!
                     )
+                    
                 }
                 
                 completion(cafes)
@@ -66,12 +53,17 @@ class CoffeeParser {
                 let json = JSON(value)
                 
                 for i in json["goods"] {
-                    goods[Int(i.0)!] = Product(
+                    
+                    let _id = Int(i.0)!
+                    
+                    goods[_id] = Product(
+                        id: _id,
                         title: i.1["title"].string!,
                         price: i.1["price"].string!,
                         imageURL: i.1["image"].string!,
                         quantityInStock: 10
                     )
+                    
                 }
                 
                 completion(goods)
@@ -83,17 +75,17 @@ class CoffeeParser {
     }
     
     
-    func sendOrder(cart: [(Product, Int)], address : String = "") {
+    func sendOrder(cart: [Product], address : String = "") {
         var data = [String : [String : Any]]()
         let userId = UIDevice.current.identifierForVendor?.uuidString
         
         for i in 0..<cart.count {
-            let (product, count) = cart[i]
+            let product = cart[i]
             
             data[String(i)] = [
-                "title" : product.title,
-                "price" : product.price,
-                "count" : count
+                "title" : product.title!,
+                "price" : product.price!,
+                "count" : product.inCart()
             ]
         }
         
@@ -106,6 +98,24 @@ class CoffeeParser {
             print(response)
         }
         
+    }
+    
+}
+
+class ImageParser {
+    
+    func getImage(_ imageURL : String, _ completion: @escaping (UIImage) -> Void) {
+        
+        AF.request(imageURL, method: .get).response { response in
+
+           switch response.result {
+            case .success(let responseData):
+                completion(UIImage(data: responseData!)!)
+            
+            case .failure(let error):
+                print("error: ", error)
+            }
+        }
     }
     
 }
