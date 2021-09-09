@@ -9,6 +9,8 @@
 import UIKit
 
 class SearchProductCell: UITableViewCell {
+    
+    static let ID : String = "searchProductCell"
 
     @IBOutlet weak var productImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
