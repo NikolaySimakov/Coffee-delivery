@@ -7,20 +7,16 @@
 //
 
 import UIKit
-import CoreData
 
-private let reuseIdentifier = "shopCell"
 
 class CafesController: UITableViewController {
 
     private var cafes : [Int : Cafe] = [:]
-    
+    private let parser = CoffeeParser()
     
     @IBOutlet weak var addressBtn: UIButton!
-    @IBAction func addressBtnTap(_ sender: UIButton) {
-        addressAlert()
+    @IBAction func addressBtnTapped(_ sender: UIButton) {
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -29,19 +25,28 @@ class CafesController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         addressBtn.layer.cornerRadius = 8
+        setupRefreshControl()
+        updateCafes()
         
-        let parser = CoffeeParser()
-        
+    }
+    
+    private func setupRefreshControl() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshCafes(_:)), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+        tableView.refreshControl!.beginRefreshing()
+    }
+    
+    private func updateCafes() {
         parser.fetchCafes { cafes in
             
             self.cafes = cafes
             self.tableView.reloadData()
+            self.tableView.refreshControl!.endRefreshing()
             
         }
     }
-    
     
     private func setupAddress() {
         let defaults = UserDefaults.standard
@@ -50,57 +55,35 @@ class CafesController: UITableViewController {
             self.addressBtn.setTitle(address, for: .normal)
         }
     }
-    
-    
-    private func addressAlert() {
-        let alert = UIAlertController(title: "Укажите свой адрес", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Отменить", style: .cancel, handler: nil))
 
-        alert.addTextField(configurationHandler: { textField in
-            let defaultMessage = "Добавить адрес"
-            textField.placeholder = defaultMessage
-            if self.addressBtn.currentTitle != defaultMessage {
-                textField.text = self.addressBtn.currentTitle
-            }
-            textField.clearButtonMode = .always
-        })
-
-        alert.addAction(UIAlertAction(title: "Ок", style: .default, handler: { action in
-            
-            if let address = alert.textFields?.first?.text {
-                self.addressBtn.setTitle(address, for: .normal)
-                let defaults = UserDefaults.standard
-                defaults.set(address, forKey: "Address")
-            }
-        }))
-
-        self.present(alert, animated: true)
+    @objc private func refreshCafes(_ sender: Any) {
+        updateCafes()
     }
-
     
     // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cafes.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ShopCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: CafeCell.ID, for: indexPath) as! CafeCell
         cell.initData(cafe: cafes[indexPath.row]!)
-        let parser = CoffeeParser()
-        if cafes[indexPath.row]!.image == nil {
-            parser.getImage(cafes[indexPath.row]!.imageURL!) { (img) in
-                cell.shopImage.image = img
-                self.cafes[indexPath.row]!.image = img
-            }
-        } else {
-            cell.shopImage.image = cafes[indexPath.row]!.image
-        }
+        
+        loadImageIfNeeded(cafes: cafes, row: indexPath.row, cell: cell)
+        
         return cell
+    }
+    
+    private func loadImageIfNeeded(cafes: [Int : Cafe], row: Int, cell: CafeCell) {
+        if let img = cafes[row]!.image {
+            cell.shopImage.image = img
+        } else {
+            parser.getImage(cafes[row]!.imageURL!) { (img) in
+                cafes[row]!.image = img
+                self.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+            }
+        }
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -115,8 +98,11 @@ class CafesController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
-
     
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if cafes[indexPath.row]!.status { return indexPath } else { return nil }
+    }
+
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -124,9 +110,11 @@ class CafesController: UITableViewController {
             MenuController, let index = tableView.indexPathForSelectedRow {
             destination.menuID = String(index.row)
             destination.title = cafes[index.row]?.title
+        } else if let destination = segue.destination as?
+            SearchCafesController {
+            destination.searchCafes = [Cafe](cafes.values)
         }
+//        if let destination = segue.destination as? AddressController {}
     }
-    
 
 }
-
