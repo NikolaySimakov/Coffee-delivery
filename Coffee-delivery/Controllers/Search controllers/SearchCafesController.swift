@@ -1,5 +1,5 @@
 //
-//  SearchController.swift
+//  SearchCafesController.swift
 //  Coffee-delivery
 //
 //  Created by User on 08/08/2021.
@@ -9,35 +9,23 @@
 import UIKit
 
 
-enum SearchFor {
-    
-    case cafes
-    case products
-    
-}
-
-
 class SearchCafesController: UITableViewController {
     
     @IBOutlet weak var searchBar: UISearchBar!
     
     private var isSearchBarEmpty: Bool { return searchBar.text?.isEmpty ?? true }
-    var searchObjects : [Int : Any] = [:]
-    var searchFor : SearchFor!
+    var searchCafes : [Cafe] = []
     
-    private var filteredObjects : [Any] = []
+    private var filteredCafes : [Cafe] = []
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.removeExtraCellLines()
         searchBar.delegate = self
+        title = "Кофейни"
         
-        switch searchFor {
-        case .cafes: title = "Поиск кофеен"
-        case .products: title = "Поиск напитков"
-        default: break
-        }
     }
     
     
@@ -46,37 +34,36 @@ class SearchCafesController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if !isSearchBarEmpty {
-            return filteredObjects.count
+            return filteredCafes.count
         }
         
-        return searchObjects.count
+        return searchCafes.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let reuseIdentifier = "searchCell"
+        let cell = tableView.dequeueReusableCell(withIdentifier: SearchCafeCell.ID, for: indexPath) as! SearchCafeCell
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! SearchCell
+        var cafesArray : [Cafe] = []
+        if isSearchBarEmpty { cafesArray = searchCafes } else { cafesArray = filteredCafes }
         
-        if isSearchBarEmpty {
-            
-            if let obj = searchObjects[indexPath.row] as? Cafe {
-                cell.initCafeData(obj)
-            } else if let obj = searchObjects[indexPath.row] as? Product {
-                cell.initProductData(obj)
-            }
-            
-        } else {
-            
-            if let obj = filteredObjects[indexPath.row] as? Cafe {
-                cell.initCafeData(obj)
-            } else if let obj = filteredObjects[indexPath.row] as? Product {
-                cell.initProductData(obj)
-            }
-            
-        }
+        let cafe = cafesArray[indexPath.row]
+        cell.initCafeData(cafe)
+        loadImageIfNeeded(array: cafesArray, row: indexPath.row, cell: cell)
         
         return cell
+    }
+    
+    private func loadImageIfNeeded(array: [Cafe], row: Int, cell: SearchCafeCell) {
+        if let img = array[row].image {
+            cell.imgView.image = img
+        } else {
+            let imgParser = ImageParser()
+            imgParser.getImage(array[row].imageURL!) { (img) in
+                array[row].image = img
+                self.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+            }
+        }
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -86,24 +73,27 @@ class SearchCafesController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destination = storyboard.instantiateViewController(withIdentifier: "MenuController") as! MenuController
-        let cafe = searchObjects[indexPath.row] as! Cafe
+        
+        var cafe : Cafe!
+        if isSearchBarEmpty { cafe = searchCafes[indexPath.row] } else { cafe = filteredCafes[indexPath.row] }
+        
         destination.menuID = String(cafe.id)
         destination.title = cafe.title
         navigationController?.pushViewController(destination, animated: true)
-        
-//        tableView.deselectRow(at: indexPath, animated: true)
+
     }
     
-    
-    // MARK: - Navigation
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if isSearchBarEmpty {
+            if searchCafes[indexPath.row].status { return indexPath } else { return nil }
+        } else {
+            if filteredCafes[indexPath.row].status { return indexPath } else { return nil }
+        }
     }
-    
 }
 
 
-extension SearchController : UISearchBarDelegate {
+extension SearchCafesController : UISearchBarDelegate {
     
     // MARK: - Search bar delegate
     
@@ -129,46 +119,14 @@ extension SearchController : UISearchBarDelegate {
     
     func filterContent(for searchText: String) {
         
-        filteredObjects = []
-        
-        switch searchFor {
-            
-        case .cafes:
-            
-            searchObjects.values.forEach { (obj) in
-                
-                let cafe = obj as! Cafe
-                if cafe.title.lowercased().hasPrefix(searchText.lowercased()) {
-                    filteredObjects.append(obj)
-                }
-                
+        filteredCafes = searchCafes.filter { (cafe) -> Bool in
+            let splittedTitle = cafe.title.lowercased().components(separatedBy: [",", " ", "!", ".", "?", "«"])
+            let coincidences = splittedTitle.filter { (t) -> Bool in
+                return t.hasPrefix(searchText.lowercased())
             }
-            
-        case .products:
-            
-            searchObjects.values.forEach { (obj) in
-                
-                let cafe = obj as! Product
-                if cafe.title.lowercased().hasPrefix(searchText.lowercased()) {
-                    filteredObjects.append(obj)
-                }
-                
-            }
-            
-        default:
-            break
+            return coincidences.count > 0
         }
         
         tableView.reloadData()
     }
 }
-
-
-//public extension UITextField {
-//
-//    override var textInputMode: UITextInputMode? {
-//        let locale = Locale(identifier: "ru")
-//
-//        return UITextInputMode.activeInputModes.first(where: { $0.primaryLanguage == locale.languageCode }) ?? super.textInputMode
-//    }
-//}
