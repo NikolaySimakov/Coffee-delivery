@@ -1,5 +1,5 @@
 //
-//  OrdersStorage.swift
+//  OrderStorage.swift
 //  Coffee-delivery
 //
 //  Created by User on 23/08/2021.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class OrdersStorage {
+class OrderStorage {
     
     private var context: NSManagedObjectContext {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -18,7 +18,7 @@ class OrdersStorage {
     
     func show() -> [Order]? {
         
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Cart")
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "OrderHistory")
         
         do {
             
@@ -46,23 +46,32 @@ class OrdersStorage {
         return nil
     }
     
-    func save(order: Order) {
+    func save(orderData: Order) {
         let entity = NSEntityDescription.entity(forEntityName: "OrderHistory", in: context)!
-        let obj = NSManagedObject(entity: entity, insertInto: context)
+        let order = NSManagedObject(entity: entity, insertInto: context)
         
-        obj.setValue(order.cafeTitle, forKeyPath: "cafeTitle")
-        obj.setValue(order.totalPrice, forKeyPath: "totalPrice")
-        obj.setValue(order.deliveryDate, forKeyPath: "deliveryDate")
-//        obj.setValue([], forKeyPath: "goods")
+        order.setValue(orderData.cafeTitle, forKeyPath: "cafeTitle")
+        order.setValue(orderData.totalPrice, forKeyPath: "totalPrice")
+        order.setValue(orderData.deliveryDate, forKeyPath: "deliveryDate")
+//        order.setValue(orderData.goods, forKeyPath: "goods")
         
-        do {
-            try context.save()
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-        }
+        saveContext()
     }
     
     func update() {
         
     }
+    
+    private func saveContext() {
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+              context.rollback()
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
+    
 }
