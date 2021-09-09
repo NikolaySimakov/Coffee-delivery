@@ -12,6 +12,8 @@ import Alamofire
 
 class CartCell: UITableViewCell {
     
+    static let ID : String = "cartCell"
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var productImageView: UIImageView!
@@ -33,15 +35,8 @@ class CartCell: UITableViewCell {
     
     
     func initData(product: Product) {
-        
-        let parser = CoffeeParser()
-        
-        parser.getImage(product.imageURL) { (img) in
-            self.productImageView.image = img
-        }
-        
         titleLabel.text = product.title
-        priceLabel.text = product.price + " ₽"
+        priceLabel.text = product.price + "₽"
         countLabel.text = String(product.inCart())
         
     }
@@ -50,14 +45,12 @@ class CartCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         productImageView.layer.cornerRadius = 8
-        decreaseButton.layer.cornerRadius = 4
-        increaseButton.layer.cornerRadius = 4
+        decreaseButton.layer.cornerRadius = 6
+        increaseButton.layer.cornerRadius = 6
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        
     }
 
 }
