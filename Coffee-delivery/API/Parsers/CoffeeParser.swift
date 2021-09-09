@@ -13,10 +13,6 @@ import SwiftyJSON
 
 class CoffeeParser {
     
-    private let apiURL : String = "https://coffee-delivery.herokuapp.com/"
-//    private let apiURL : String = "http://localhost:5000/"
-    
-    
     func getImage(_ imageURL : String, _ completion: @escaping (UIImage) -> Void) {
         
         AF.request(imageURL, method: .get).response { response in
@@ -42,10 +38,10 @@ class CoffeeParser {
                 
                 for i in JSON(value) {
                     cafes[Int(i.0)!] = Cafe(
+                        id: Int(i.0)!,
                         title: i.1["title"].string!,
                         rating: i.1["rating"].string!,
                         imageURL: i.1["image"].string!,
-                        image: nil,
                         status: i.1["status"].bool!
                     )
                 }
@@ -73,7 +69,8 @@ class CoffeeParser {
                     goods[Int(i.0)!] = Product(
                         title: i.1["title"].string!,
                         price: i.1["price"].string!,
-                        image: i.1["image"].string!
+                        imageURL: i.1["image"].string!,
+                        quantityInStock: 10
                     )
                 }
                 
@@ -112,4 +109,3 @@ class CoffeeParser {
     }
     
 }
-

@@ -16,7 +16,9 @@ class DetailController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     
     @IBAction func addToCart(_ sender: UIButton) {
-        
+        self.dismiss(animated: true) {
+            print("something")
+        }
     }
     
     

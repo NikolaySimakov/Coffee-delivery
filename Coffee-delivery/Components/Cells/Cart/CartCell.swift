@@ -32,29 +32,24 @@ class CartCell: UITableViewCell {
     }
     
     
-    func initData(product: Product, count: String) {
+    func initData(product: Product) {
         
-        AF.request(product.image, method: .get).response{ response in
-
-           switch response.result {
-            case .success(let responseData):
-                self.productImageView.image = UIImage(data: responseData!)
-
-            case .failure(let error):
-                print("error: ", error)
-            }
+        let parser = CoffeeParser()
+        
+        parser.getImage(product.imageURL) { (img) in
+            self.productImageView.image = img
         }
         
         titleLabel.text = product.title
         priceLabel.text = product.price + " ₽"
-        countLabel.text = count
+        countLabel.text = String(product.inCart())
         
     }
     
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        productImageView.layer.cornerRadius = 5
+        productImageView.layer.cornerRadius = 8
         decreaseButton.layer.cornerRadius = 4
         increaseButton.layer.cornerRadius = 4
     }

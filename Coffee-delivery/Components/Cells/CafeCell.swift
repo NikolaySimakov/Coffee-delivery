@@ -27,8 +27,6 @@ class ShopCell: UITableViewCell {
         
         selectionStyle = .none
         shopImage.image = cafe.image
-        shopImage.layer.cornerRadius = 20
-        shopImage.clipsToBounds = true
         nameLabel.text = cafe.title
         ratingLabel.text = cafe.rating
         if !cafe.status! { self.contentView.alpha = 0.5 } else { self.contentView.alpha = 1 }
