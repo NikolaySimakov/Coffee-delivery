@@ -1,5 +1,5 @@
 //
-//  DrinkDetailController.swift
+//  DrinkDetailsController.swift
 //  Coffee-delivery
 //
 //  Created by User on 20/07/2021.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DrinkDetailController: UIViewController {
+class DrinkDetailsController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
