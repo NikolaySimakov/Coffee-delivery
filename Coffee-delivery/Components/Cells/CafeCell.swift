@@ -1,5 +1,5 @@
 //
-//  ShopCell.swift
+//  CafeCell.swift
 //  Coffee-delivery
 //
 //  Created by User on 19/05/2021.
@@ -7,9 +7,10 @@
 //
 
 import UIKit
-import Alamofire
 
-class ShopCell: UITableViewCell {
+class CafeCell: UITableViewCell {
+    
+    static let ID : String = "cafeCell"
     
     @IBOutlet weak var shopImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
