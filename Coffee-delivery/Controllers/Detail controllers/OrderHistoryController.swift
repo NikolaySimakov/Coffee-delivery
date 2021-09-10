@@ -1,5 +1,5 @@
 //
-//  TestController.swift
+//  OrderHistoryController.swift
 //  Coffee-delivery
 //
 //  Created by User on 01/09/2021.
@@ -17,8 +17,8 @@ class OrderHistoryController: UIViewController, ExpandableDelegate {
     @IBOutlet weak var tableView: ExpandableTableView!
     
     var expandedCell: UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "testExpendedCell")!
-        cell.textLabel!.text = "12345"
+        let cell = tableView.dequeueReusableCell(withIdentifier: OrderHistoryDetailCell.ID) as! OrderHistoryDetailCell
+        cell.titleLabel.text = "Латте"
         return cell
     }
     
@@ -31,31 +31,32 @@ class OrderHistoryController: UIViewController, ExpandableDelegate {
         tableView.removeExtraCellLines()
         
         
-        let order = Order(cafeTitle: "Some title", totalPrice: "123", deliveryDate: Date(), goods: [])
-        orderHistory.save(order: order)
+        let order = Order(cafeTitle: "Some title", totalPrice: "123", deliveryDate: Date(), goods: [Product(id: 1, title: "oiqru", price: "123", imageURL: "", quantityInStock: 12), Product(id: 4, title: "oiqruelgkn", price: "1234", imageURL: "", quantityInStock: 12), Product(id: 2, title: "oiqru", price: "123", imageURL: "", quantityInStock: 12)])
+        orderHistory.save(orderData: order)
         
-        if let orders = orderHistory.show() {
-
-            self.orders = orders
-
-            if orders.count == 0 {
-                let alert = UIAlertController(title: "Нет истории заказов", message: "Вы еще ничего не заказывали.", preferredStyle: .alert)
-
-                alert.addAction(UIAlertAction(title: "Ясно", style: .default, handler: { _ in
-                    self.dismiss(animated: true, completion: nil)
-                }))
-
-                self.present(alert, animated: true)
-            }
-        } else {
-            let alert = UIAlertController(title: "Ой...", message: "Возникла какая-то ошибка.", preferredStyle: .alert)
-
-            alert.addAction(UIAlertAction(title: "Назад", style: .default, handler: { _ in
-                self.dismiss(animated: true, completion: nil)
-            }))
-
-            self.present(alert, animated: true)
-        }
+//        if let orders = orderHistory.show() {
+//            
+//            self.orders = orders
+//            self.orders.reverse()
+//
+//            if orders.count == 0 {
+//                let alert = UIAlertController(title: "Нет истории заказов", message: "Вы еще ничего не заказывали.", preferredStyle: .alert)
+//
+//                alert.addAction(UIAlertAction(title: "Ясно", style: .default, handler: { _ in
+//                    self.dismiss(animated: true, completion: nil)
+//                }))
+//
+//                self.present(alert, animated: true)
+//            }
+//        } else {
+//            let alert = UIAlertController(title: "Ой...", message: "Возникла какая-то ошибка.", preferredStyle: .alert)
+//
+//            alert.addAction(UIAlertAction(title: "Назад", style: .default, handler: { _ in
+//                self.dismiss(animated: true, completion: nil)
+//            }))
+//
+//            self.present(alert, animated: true)
+//        }
     }
     
     // MARK: - Table view data source
@@ -65,19 +66,19 @@ class OrderHistoryController: UIViewController, ExpandableDelegate {
     }
     
     func expandableTableView(_ expandableTableView: ExpandableTableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "orderHistoryCell", for: indexPath) as! OrderHistoryCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: OrderHistoryCell.ID, for: indexPath) as! OrderHistoryCell
         
         cell.arrowImageView.image = nil
         
         cell.titleLabel.text = orders[indexPath.row].cafeTitle
-        cell.totalPriceLabel.text = orders[indexPath.row].totalPrice + " ₽"
+        cell.totalPriceLabel.text = orders[indexPath.row].totalPrice + "₽"
         cell.deliveryTimeLabel.text = orders[indexPath.row].deliveryDateString()
         
         return cell
     }
     
     func expandableTableView(_ expandableTableView: ExpandableTableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 110
+        return 130
     }
     
     @objc(expandableTableView:didCloseRowAt:) func expandableTableView(_ expandableTableView: UITableView, didCloseRowAt indexPath: IndexPath) {
@@ -98,6 +99,18 @@ class OrderHistoryController: UIViewController, ExpandableDelegate {
     
     func expandableTableView(_ expandableTableView: ExpandableTableView, expandedCellsForRowAt indexPath: IndexPath) -> [UITableViewCell]? {
         return [expandedCell, expandedCell]
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if cell is OrderHistoryDetailCell {
+            cell.separatorInset = UIEdgeInsets()
+        }
+    }
+    
+    func expandableTableView(_ expandableTableView: ExpandableTableView, willDisplay: UITableViewCell, forRowAt: IndexPath) {
+        if willDisplay is OrderHistoryDetailCell {
+            willDisplay.separator(hide: true)
+        }
     }
     
 }
