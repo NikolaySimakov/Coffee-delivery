@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15400" systemVersion="18F132" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="UserInfo" representedClassName="UserInfo" syncable="YES">
-        <attribute name="cart" optional="YES" attributeType="Transformable"/>
-        <attribute name="history" optional="YES" attributeType="Transformable"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15400" systemVersion="18G103" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Cart" representedClassName="Cart" syncable="YES">
+        <attribute name="cafeId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="count" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="price" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="OrderHistory" representedClassName=".OrderHistory" syncable="YES">
+        <attribute name="cafeTitle" optional="YES" attributeType="String"/>
+        <attribute name="deliveryDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="totalPrice" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="UserInfo" positionX="-63" positionY="-18" width="128" height="73"/>
+        <element name="Cart" positionX="-63" positionY="0" width="128" height="118"/>
+        <element name="OrderHistory" positionX="-54" positionY="27" width="128" height="88"/>
     </elements>
 </model>
