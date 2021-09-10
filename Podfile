@@ -6,8 +6,11 @@ target 'Coffee-delivery' do
   use_frameworks!
 
   # Pods for Coffee-delivery
-pod 'Alamofire', '~> 5.0'
-pod 'SwiftyJSON', '~> 4.0'
-pod 'Hero'
+
+  pod 'Alamofire', '~> 5.0'
+  pod 'SwiftyJSON', '~> 4.0'
+  pod 'Hero'
+  pod 'ExpandableCell'
+  pod 'SkeletonView'
 
 end
